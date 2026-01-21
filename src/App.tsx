@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
-import type { ReactElement } from 'react'
+import type { CSSProperties, ReactElement } from 'react'
 import {
   AIM_TARGET_HITS,
   AIM_TIME_LIMIT,
   MAZE_SIZE,
+  MAZE_TIME_LIMIT,
+  MAZE_TARGET_TIME,
   MEMORY_SEQUENCE_LENGTH,
   REACTION_TARGET_MS,
   TYPING_TARGET_WPM,
@@ -177,8 +179,7 @@ export default function App() {
               <p className="chip">Two-player bragging rights</p>
               <h1>Beat the benchmarks. Unlock the Valentine.</h1>
               <p className="hero-copy">
-                Five pixel challenges. Win 3 to reveal the final message. Retry any round as much as
-                you want before locking in a result.
+                There are 5 challenges if you want to have a boyfriend for valentines this year beat your boyfriend in at least 3 challenges and send him a screenshot of the final message to prove your worth.
               </p>
               <div className="hero-actions">
                 <button className="btn primary" onClick={startRun}>
@@ -191,7 +192,7 @@ export default function App() {
                     <li>Typing: {TYPING_TARGET_WPM}+ WPM</li>
                     <li>Memory: {MEMORY_SEQUENCE_LENGTH} sparks</li>
                     <li>Aim: {AIM_TARGET_HITS} hits in {AIM_TIME_LIMIT}s</li>
-                    <li>Maze: escape the {MAZE_SIZE}x{MAZE_SIZE} grid</li>
+                    <li>Maze: escape the maze in {MAZE_TARGET_TIME}</li>
                   </ul>
                 </div>
               </div>
@@ -237,20 +238,50 @@ export default function App() {
         {screen === 'final' && (
           <section className="screen screen-final">
             <div className="final-card">
-              <p className="chip">{wins >= 3 ? 'Unlocked' : 'Locked'}</p>
-              <h2>{wins >= 3 ? 'Valentine.exe Unlocked' : 'Need More Wins'}</h2>
-              <p className="final-message">
-                {wins >= 3
-                  ? 'Roses are red, pixels are sweet. You crushed the trials. Be my player two?'
-                  : 'You are close! Sharpen those skills and rerun the trials.'}
-              </p>
-              <div className="final-actions">
-                <button className="btn primary" onClick={startRun}>
-                  Run It Back
-                </button>
-                <button className="btn ghost" onClick={resetRun}>
-                  Return Home
-                </button>
+              {wins >= 3 && (
+                <div className="final-hearts" aria-hidden="true">
+                  {[
+                    { x: '8%', delay: '0s', duration: '4.6s', size: '14px' },
+                    { x: '22%', delay: '1s', duration: '5.2s', size: '12px' },
+                    { x: '38%', delay: '0.4s', duration: '4.1s', size: '16px' },
+                    { x: '52%', delay: '1.6s', duration: '5.6s', size: '13px' },
+                    { x: '66%', delay: '0.8s', duration: '4.4s', size: '12px' },
+                    { x: '78%', delay: '1.2s', duration: '5s', size: '15px' },
+                    { x: '90%', delay: '0.2s', duration: '4.8s', size: '13px' },
+                  ].map((heart, index) => (
+                    <span
+                      key={index}
+                      className="pixel-heart"
+                      style={
+                        {
+                          ['--x' as string]: heart.x,
+                          ['--delay' as string]: heart.delay,
+                          ['--duration' as string]: heart.duration,
+                          ['--size' as string]: heart.size,
+                        } as CSSProperties
+                      }
+                    >
+                      ❤
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div className="final-content">
+                <p className="chip">{wins >= 3 ? 'Unlocked' : 'Locked'}</p>
+                <h2>{wins >= 3 ? 'Valentine.exe Unlocked' : 'Need More Wins'}</h2>
+                <p className="final-message">
+                  {wins >= 3
+                    ? 'Roses are red, pixels are sweet. You crushed the trials. Be my player two? <3'
+                    : 'YOU FAILED! Try again if you want to be my valentine.'}
+                </p>
+                <div className="final-actions">
+                  <button className="btn primary" onClick={startRun}>
+                    Run It Back
+                  </button>
+                  <button className="btn ghost" onClick={resetRun}>
+                    Return Home
+                  </button>
+                </div>
               </div>
             </div>
           </section>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { MAZE_SIZE, MAZE_TIME_LIMIT } from './config'
+import { MAZE_SIZE, MAZE_TARGET_TIME, MAZE_TIME_LIMIT } from './config'
 import type { GameProps } from './types'
 
 type Cell = 0 | 1
@@ -106,9 +106,12 @@ export function MazeGame({ onWin, onLose }: GameProps) {
     if (wonRef.current) return
     if (player.row === exit.row && player.col === exit.col) {
       wonRef.current = true
-      onWin(`Maze cleared in ${moves + 1} moves.`)
+      const elapsed = MAZE_TIME_LIMIT - timeLeft
+      const targetNote =
+        elapsed <= MAZE_TARGET_TIME ? ' Beat the target time!' : ' Try to beat the target next run.'
+      onWin(`Maze cleared in ${moves + 1} moves and ${elapsed}s.${targetNote}`)
     }
-  }, [exit.col, exit.row, moves, onWin, player.col, player.row])
+  }, [exit.col, exit.row, moves, onWin, player.col, player.row, timeLeft])
 
   useEffect(() => {
     if (wonRef.current) return
@@ -140,6 +143,7 @@ export function MazeGame({ onWin, onLose }: GameProps) {
       <div className="game-info">
         <p>Use arrow keys or WASD.</p>
         <p>Moves: {moves}</p>
+        <p>Time to beat: {MAZE_TARGET_TIME}s</p>
         <p>Time: {timeLeft}s</p>
       </div>
     </div>
