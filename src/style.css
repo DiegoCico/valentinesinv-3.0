@@ -197,6 +197,12 @@ body {
   font-size: 11px;
 }
 
+.goal {
+  margin-top: 10px;
+  font-size: 11px;
+  color: #2a1a2a;
+}
+
 .mini-legend {
   font-size: 10px;
   display: grid;

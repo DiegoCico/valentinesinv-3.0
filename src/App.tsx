@@ -23,6 +23,7 @@ type GameDefinition = {
   id: GameId
   name: string
   tagline: string
+  goal: string
   component: (props: GameProps) => ReactElement
 }
 
@@ -37,30 +38,35 @@ const GAME_DEFS: GameDefinition[] = [
     id: 'reaction',
     name: 'Reaction Rush',
     tagline: 'Click when the heart flashes green.',
+    goal: `Goal to beat: ${REACTION_TARGET_MS}ms reaction.`,
     component: ReactionGame,
   },
   {
     id: 'typing',
     name: 'Typing Sprint',
     tagline: 'Type the phrase fast and clean.',
+    goal: `Goal to beat: ${TYPING_TARGET_WPM}+ WPM.`,
     component: TypingGame,
   },
   {
     id: 'memory',
     name: 'Memory Glow',
     tagline: 'Repeat the sparkle pattern.',
+    goal: `Goal to beat: ${MEMORY_SEQUENCE_LENGTH} sparks.`,
     component: MemoryGame,
   },
   {
     id: 'aim',
     name: 'Heart Whack',
     tagline: 'Hit the hearts before the timer ends.',
+    goal: `Goal to beat: ${AIM_TARGET_HITS} hits in ${AIM_TIME_LIMIT}s.`,
     component: AimGame,
   },
   {
     id: 'maze',
     name: 'Love Maze',
     tagline: 'Find the star with arrow keys.',
+    goal: 'Goal to beat: escape before time runs out.',
     component: MazeGame,
   },
 ]
@@ -198,6 +204,7 @@ export default function App() {
             <GameHeader
               title={currentGameDef.name}
               tagline={currentGameDef.tagline}
+              goal={currentGameDef.goal}
               currentIndex={currentIndex}
             />
             <currentGameDef.component onWin={handleWin} onLose={handleLose} />
@@ -256,10 +263,12 @@ export default function App() {
 function GameHeader({
   title,
   tagline,
+  goal,
   currentIndex,
 }: {
   title: string
   tagline: string
+  goal: string
   currentIndex: number
 }) {
   return (
@@ -268,6 +277,7 @@ function GameHeader({
         <p className="chip">Game {currentIndex + 1} of 5</p>
         <h2>{title}</h2>
         <p className="muted">{tagline}</p>
+        <p className="goal">{goal}</p>
       </div>
       <div className="mini-legend">
         <span>Retry as needed</span>

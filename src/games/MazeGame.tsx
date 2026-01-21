@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { MAZE_SIZE } from './config'
+import { MAZE_SIZE, MAZE_TIME_LIMIT } from './config'
 import type { GameProps } from './types'
 
 type Cell = 0 | 1
@@ -52,12 +52,32 @@ function generateMaze(size: number): Cell[][] {
   return grid
 }
 
-export function MazeGame({ onWin }: GameProps) {
+export function MazeGame({ onWin, onLose }: GameProps) {
   const [maze] = useState(() => generateMaze(MAZE_SIZE))
   const [player, setPlayer] = useState<Point>({ row: 1, col: 1 })
   const [moves, setMoves] = useState(0)
+  const [timeLeft, setTimeLeft] = useState(MAZE_TIME_LIMIT)
   const exit = useMemo<Point>(() => ({ row: MAZE_SIZE - 2, col: MAZE_SIZE - 2 }), [])
   const wonRef = useRef(false)
+  const timerRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    timerRef.current = window.setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          window.clearInterval(timerRef.current ?? undefined)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => {
+      if (timerRef.current) {
+        window.clearInterval(timerRef.current)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
@@ -90,6 +110,13 @@ export function MazeGame({ onWin }: GameProps) {
     }
   }, [exit.col, exit.row, moves, onWin, player.col, player.row])
 
+  useEffect(() => {
+    if (wonRef.current) return
+    if (timeLeft === 0) {
+      onLose('Time ran out.')
+    }
+  }, [onLose, timeLeft])
+
   return (
     <div className="game-card">
       <div className="maze-board" style={{ ['--maze-size' as string]: MAZE_SIZE }}>
@@ -113,6 +140,7 @@ export function MazeGame({ onWin }: GameProps) {
       <div className="game-info">
         <p>Use arrow keys or WASD.</p>
         <p>Moves: {moves}</p>
+        <p>Time: {timeLeft}s</p>
       </div>
     </div>
   )
