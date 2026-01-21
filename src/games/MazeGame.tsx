@@ -104,14 +104,19 @@ export function MazeGame({ onWin, onLose }: GameProps) {
 
   useEffect(() => {
     if (wonRef.current) return
+
     if (player.row === exit.row && player.col === exit.col) {
       wonRef.current = true
       const elapsed = MAZE_TIME_LIMIT - timeLeft
-      const targetNote =
-        elapsed <= MAZE_TARGET_TIME ? ' Beat the target time!' : ' Try to beat the target next run.'
-      onWin(`Maze cleared in ${moves + 1} moves and ${elapsed}s.${targetNote}`)
+
+      if (elapsed <= MAZE_TARGET_TIME) {
+        onWin(`Maze cleared in ${moves + 1} moves and ${elapsed}s. Beat the target time!`)
+      } else {
+        onLose(`Maze cleared in ${moves + 1} moves and ${elapsed}s. Too slow (need ≤ ${MAZE_TARGET_TIME}s).`)
+      }
     }
-  }, [exit.col, exit.row, moves, onWin, player.col, player.row, timeLeft])
+  }, [exit.col, exit.row, moves, onLose, onWin, player.col, player.row, timeLeft])
+
 
   useEffect(() => {
     if (wonRef.current) return
