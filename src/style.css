@@ -335,6 +335,32 @@ body {
   border: 2px solid #2a1a2a;
 }
 
+.maze-board {
+  display: grid;
+  grid-template-columns: repeat(var(--maze-size), minmax(18px, 1fr));
+  border: 3px solid #2a1a2a;
+  background: #fff7fb;
+}
+
+.maze-cell {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+
+.maze-cell.wall {
+  background: #2a1a2a;
+}
+
+.maze-cell.path {
+  background: #fff;
+}
+
+.maze-cell.exit {
+  background: #b8ffb8;
+}
+
 .result-card,
 .final-card {
   max-width: 520px;
