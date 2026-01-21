@@ -190,7 +190,7 @@ export default function App() {
                     <li>Typing: {TYPING_TARGET_WPM}+ WPM</li>
                     <li>Memory: {MEMORY_SEQUENCE_LENGTH} sparks</li>
                     <li>Aim: {AIM_TARGET_HITS} hits in {AIM_TIME_LIMIT}s</li>
-                    <li>Maze: escape the maze in {MAZE_TARGET_TIME}</li>
+                    <li>Maze: escape the maze in {MAZE_TARGET_TIME} seconds</li>
                   </ul>
                 </div>
               </div>
