@@ -3,8 +3,6 @@ import type { CSSProperties, ReactElement } from 'react'
 import {
   AIM_TARGET_HITS,
   AIM_TIME_LIMIT,
-  MAZE_SIZE,
-  MAZE_TIME_LIMIT,
   MAZE_TARGET_TIME,
   MEMORY_SEQUENCE_LENGTH,
   REACTION_TARGET_MS,
